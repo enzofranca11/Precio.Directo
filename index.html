@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Precio Directo | Camping y Pesca</title>
+<meta name="description" content="Camping, pesca y aire libre al mejor precio. Armá tu pedido y te escribimos por Instagram con el link de pago.">
+<meta name="theme-color" content="#16301f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f1ea; --card:#ffffff; --ink:#17231b; --muted:#5b685f; --line:#dedbd0;
+  --brand:#1f6b3a; --brand-dark:#16301f; --accent:#e8590c; --accent-ink:#ffffff;
+  --ok:#1f6b3a; --err:#b3261e;
+  --display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --body:'Barlow',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.4;padding-bottom:84px}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+
+/* header */
+header{background:var(--brand-dark);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
+.logo{white-space:nowrap;font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.logo small{display:block;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.14em;color:#b9d2c0;margin-top:3px}
+.cartbtn{position:relative;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:9px 16px;font-weight:600;cursor:pointer;white-space:nowrap;flex:none;display:flex;gap:8px;align-items:center}
+.cartbtn .n{background:#fff;color:var(--accent);border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:13px;font-weight:700;padding:0 6px}
+
+/* intro */
+.hero{background:var(--brand-dark);color:#fff;padding:14px 0 24px}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,8vw,56px);line-height:.98;margin:6px 0 10px;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.hero h1 span{color:#ffb27a}
+.hero p{margin:0;color:#cfe0d3;max-width:560px}
+.points{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;padding:0;list-style:none}
+.points li{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:7px 11px;font-size:13.5px}
+
+/* filtros */
+.tools{padding-top:16px;display:grid;gap:12px}
+.search{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 14px;font-size:16px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:500;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* grilla */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px 0 28px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+@media(min-width:960px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ph{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative}
+.ph img{width:100%;height:100%;object-fit:contain;padding:8px}
+.ph .fallback{font-family:var(--display);font-weight:700;font-size:44px;color:#b7c4ba;text-transform:uppercase}
+.tag{position:absolute;left:8px;top:8px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:600;border-radius:6px;padding:3px 7px;letter-spacing:.03em}
+.info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.name{font-weight:600;font-size:15px;line-height:1.25;min-height:2.5em;overflow-wrap:anywhere}
+.price{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;letter-spacing:.01em}
+.price small{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);margin-left:4px;letter-spacing:0}
+.opt{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff;font-size:14px}
+.add{margin-top:auto;border:0;background:var(--brand);color:#fff;border-radius:9px;padding:11px;font-weight:600;cursor:pointer}
+.add:active{transform:scale(.98)}
+.add.done{background:var(--ok)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+/* barra inferior */
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--brand-dark);padding:10px max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));z-index:25;transform:translateY(110%);transition:transform .22s}
+.dock.on{transform:none}
+.dock button{width:100%;max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;background:var(--accent);color:#fff;border:0;border-radius:12px;padding:14px 18px;font-weight:600;font-size:17px;cursor:pointer}
+
+/* panel pedido */
+.sheet{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;display:none}
+.sheet.on{display:block}
+.sheet header{position:sticky}
+.back{background:none;border:0;color:#fff;font-size:15px;cursor:pointer;padding:8px 0;display:flex;gap:6px;align-items:center}
+.sheet .body{max-width:640px;margin:0 auto;padding:18px max(14px,env(safe-area-inset-right)) 40px max(14px,env(safe-area-inset-left));display:grid;gap:18px}
+h2{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.02em;margin:0}
+.lines{display:grid;gap:10px}
+.line{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
+.line .t{width:64px;height:64px;background:#fff;border-radius:8px;overflow:hidden}
+.line .t img{width:100%;height:100%;object-fit:contain}
+.line .n{font-weight:600;font-size:14.5px;overflow-wrap:anywhere}
+.line .p{color:var(--muted);font-size:13.5px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:18px;cursor:pointer}
+.qty span{min-width:20px;text-align:center;font-weight:600}
+.rm{background:none;border:0;color:var(--err);font-size:13px;cursor:pointer;padding:2px 0;text-align:left}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);padding-top:12px}
+.total b{font-family:var(--display);font-size:34px;line-height:1}
+.note{color:var(--muted);font-size:13.5px;margin:0}
+form{display:grid;gap:14px}
+label.f{display:grid;gap:5px;font-weight:600;font-size:14.5px}
+label.f input[type=text],label.f input[type=tel],label.f textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px;font-weight:400;font-size:16px;width:100%}
+label.f small{font-weight:400;color:var(--muted)}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:8px}
+legend{font-weight:600;font-size:14.5px;margin-bottom:6px;padding:0}
+.radio{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer}
+.radio input{margin-top:3px;accent-color:var(--brand);width:18px;height:18px;flex:none}
+.radio:has(input:checked){border-color:var(--brand);box-shadow:0 0 0 1px var(--brand) inset}
+.radio span small{display:block;color:var(--muted);font-weight:400}
+.send{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:16px;font-weight:600;font-size:18px;cursor:pointer}
+.send[disabled]{opacity:.6;cursor:wait}
+.err{color:var(--err);font-size:14px;margin:0}
+.ok{text-align:center;display:grid;gap:12px;justify-items:center;padding:30px 0}
+.ok .tick{width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:34px}
+.ok a{color:var(--brand);font-weight:600}
+.link{background:none;border:0;color:var(--brand);font-weight:600;cursor:pointer;text-decoration:underline;font-size:15px}
+footer{border-top:1px solid var(--line);padding:20px 0 30px;color:var(--muted);font-size:13.5px}
+footer a{color:var(--brand);font-weight:600}
+:focus-visible{outline:3px solid #ffb27a;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo">Precio Directo<small>CAMPING Y PESCA · URUGUAY</small></div>
+    <button class="cartbtn" id="openCart" type="button" aria-label="Ver mi pedido">Mi pedido <span class="n" id="cartN">0</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Camping y pesca <span>al mejor precio</span></h1>
+    <p>Elegí lo que necesitás, armá tu pedido y te escribimos por Instagram con el link de pago.</p>
+    <ul class="points">
+      <li>Retiro en Montevideo</li>
+      <li>Envíos a todo el país por DAC</li>
+      <li>Mercado Pago o transferencia</li>
+    </ul>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="tools">
+    <input class="search" id="q" type="search" placeholder="Buscar: reel, carpa, lona..." aria-label="Buscar producto" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Categorías"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Precio Directo en Instagram: <a href="https://www.instagram.com/precio.directo/" target="_blank" rel="noopener">@precio.directo</a>.
+    Los precios son en pesos uruguayos y el flete del envío lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.
+  </div>
+</footer>
+
+<div class="dock" id="dock"><button type="button" id="dockBtn"><span id="dockTxt">Ver mi pedido</span><b id="dockTotal"></b></button></div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Mi pedido">
+  <header>
+    <div class="wrap bar">
+      <button class="back" id="close" type="button">&larr; Seguir mirando</button>
+      <div class="logo" style="font-size:22px">Mi pedido</div>
+    </div>
+  </header>
+  <div class="body" id="sheetBody"></div>
+</div>
+
+<iframe name="sink" id="sink" title="envio" style="display:none" tabindex="-1"></iframe>
+
+<script>
+/* ---- Configuración del formulario de Google (recibe los pedidos) ---- */
+var FORM = 'https://docs.google.com/forms/d/1E4CPu87LOXnyqmmaylFKaNVuZFRoafzhyEom5B_uzY0/formResponse';
+var E = {prod:'entry.1368549324',cant:'entry.1654063433',ig:'entry.951061040',nom:'entry.1243055395',tel:'entry.285504640',rec:'entry.1780050039',dac:'entry.618590131',pago:'entry.1724606907',com:'entry.551095706'};
+var REC = {ret:'Retiro en Montevideo', dac:'Envío por DAC'};
+var PAGO = {mp:'Mercado Pago (te mando el link)', tr:'Transferencia BROU o Itaú (te paso los datos)'};
+
+/* ---- Productos: [nombre, precio, categoría, foto, etiqueta] ---- */
+var CDN = 'https://cdn.shopify.com/s/files/1/0994/8335/3404/files/';
+var P = [
+ ['Binoculares 20-180x100',6160,'Óptica','ChatGPT_Image_13_sept_2026_03_05_43_p.m..png','Más pedido'],
+ ['Binoculares 10-70x70',3330,'Óptica','ChatGPT_Image_13_sept_2026_02_38_27_p.m..png'],
+ ['Telescopio 60x con trípode',2510,'Óptica',''],
+ ['Mochila 65 L',2380,'Camping','original_57106.jpg'],
+ ['Mochila 85 L',1890,'Camping','original_43776.jpg'],
+ ['Reel Cadence 7.3 (derecho o zurdo)',6390,'Pesca','Czn1V.jpg'],
+ ['Reel Cadence Vertix 6.6 (derecho o zurdo)',7110,'Pesca','r5bep.jpg'],
+ ['Reel Tempo 7.3 (derecho o zurdo)',10490,'Pesca','gbyVy.jpg'],
+ ['Reel AQ10000',2690,'Pesca','productos35_35195.jpg'],
+ ['Reel AQ9000',2610,'Pesca','productos35_35195.jpg'],
+ ['Reel AQ8000',2610,'Pesca','productos35_35195.jpg'],
+ ['Caña telescópica 3 m',1350,'Pesca','productos35_34956.jpg'],
+ ['Caña telescópica 3,60 m',1440,'Pesca','productos35_34956.jpg'],
+ ['Caña 3,60 m con punteras',2160,'Pesca','productos35_35051.jpg'],
+ ['Carpa Vigore autoarmable 3 personas',2070,'Camping','9NpLD.jpg'],
+ ['Carpa Vigore autoarmable 4 personas',2250,'Camping','9NpLD.jpg'],
+ ['Carpa iglú 6 personas',1980,'Camping','productos35_53174.jpg'],
+ ['Catre de aluminio',2070,'Camping','original_25187.jpg'],
+ ['Colchón inflable para auto',2160,'Camping','oKpYZ.jpg'],
+ ['Mesa plegable 90 cm',1980,'Camping','productos35_16950.jpg'],
+ ['Mesa plegable 120 cm',2160,'Camping','productos35_16950.jpg'],
+ ['Mesa 120x60 con 4 bancos',2610,'Camping','ChatGPT_Image_13_sept_2026_02_39_50_p.m..png'],
+ ['Set camping mesa con 4 bancos',2920,'Camping','eHhf2.jpg'],
+ ['Carrito plegable 76x46x48 cm',2610,'Camping','original_27731.jpg'],
+ ['Carrito plegable 88x47x55 cm',2880,'Camping','original_53271.jpg'],
+ ['Ventilador solar con 2 lámparas',2790,'Camping','SlyQ1.jpg'],
+ ['Toldo cuadrado 3x3',1890,'Sombra y lonas','productos35_16274.jpg'],
+ ['Toldo cuadrado 4x4',2610,'Sombra y lonas','wyQAr.jpg'],
+ ['Toldo triangular 3,6 m',1440,'Sombra y lonas','productos35_16274.jpg'],
+ ['Toldo triangular 4 m',1980,'Sombra y lonas','productos35_16274.jpg'],
+ ['Lona 4x6',1350,'Sombra y lonas','productos35_11534.jpg'],
+ ['Lona 5x6',1530,'Sombra y lonas','productos35_11534.jpg'],
+ ['Lona 6x8',1890,'Sombra y lonas','original_11536.jpg'],
+ ['Lona 8x12',3150,'Sombra y lonas','productos35_11534.jpg'],
+ ['Malla de sombra camuflada 3x3',1530,'Sombra y lonas','productos35_3684.jpg'],
+ ['Gazebo 2x2',3020,'Gazebos','Uhk8n.jpg'],
+ ['Gazebo 3x3 azul',3240,'Gazebos',''],
+ ['Gazebo 3x3 verde',3240,'Gazebos',''],
+ ['Gazebo 3x6',6390,'Gazebos','original_25336.jpg'],
+ ['Gazebo sombrilla 185',3150,'Gazebos','CHGvm.jpg'],
+ ['Pared de gazebo 1,90x9',1710,'Gazebos','r0PdN.jpg'],
+ ['Pared de gazebo roja 1,90x12',2250,'Gazebos','original_25313.jpg'],
+ ['Stand up paddle azul o rojo',11090,'Agua','ChatGPT_Image_13_sept_2026_02_48_29_p.m..png']
+];
+var CATS = ['Todo','Pesca','Camping','Óptica','Sombra y lonas','Gazebos','Agua'];
+
+function money(n){return '$'+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function optText(p){return p[0]+' - '+money(p[1]);}
+function photo(p){return p[3]?CDN+p[3]:'';}
+
+var cart = {};   // índice de producto -> cantidad
+try{ cart = JSON.parse(localStorage.getItem('pd_cart')||'{}')||{}; }catch(e){ cart={}; }
+var cat='Todo', term='';
+
+function save(){ try{localStorage.setItem('pd_cart',JSON.stringify(cart));}catch(e){} }
+function count(){ var n=0; for(var k in cart) n+=cart[k]; return n; }
+function total(){ var t=0; for(var k in cart) t+=cart[k]*P[k][1]; return t; }
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+
+/* ---- Catálogo ---- */
+function imgTag(p){
+  var u=photo(p);
+  if(!u) return '<div class="fallback">'+p[0].charAt(0)+'</div>';
+  return '<img src="'+u+'" alt="'+p[0]+'" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'fallback\',textContent:\''+p[0].charAt(0)+'\'}))">';
+}
+function renderChips(){
+  var c=document.getElementById('chips');
+  c.innerHTML=CATS.map(function(x){return '<button type="button" class="chip" aria-pressed="'+(x===cat)+'" data-c="'+x+'">'+x+'</button>';}).join('');
+}
+function renderGrid(){
+  var g=document.getElementById('grid'), out=[], t=norm(term);
+  P.forEach(function(p,i){
+    if(cat!=='Todo' && p[2]!==cat) return;
+    if(t && norm(p[0]).indexOf(t)<0 && norm(p[2]).indexOf(t)<0) return;
+    var inCart=cart[i]||0;
+    out.push('<article class="card"><div class="ph">'+(p[4]?'<span class="tag">'+p[4]+'</span>':'')+imgTag(p)+'</div>'+
+      '<div class="info"><div class="name">'+p[0]+'</div>'+
+      '<div class="price">'+money(p[1])+'</div>'+
+      '<button type="button" class="add'+(inCart?' done':'')+'" data-i="'+i+'">'+(inCart?'En tu pedido ('+inCart+') · sumar':'Agregar al pedido')+'</button></div></article>');
+  });
+  g.innerHTML=out.length?out.join(''):'<div class="empty">No encontramos ese producto. Probá con otra palabra o escribinos por Instagram.</div>';
+}
+function renderDock(){
+  var n=count();
+  document.getElementById('cartN').textContent=n;
+  var d=document.getElementById('dock');
+  d.classList.toggle('on',n>0);
+  document.getElementById('dockTxt').textContent='Ver mi pedido ('+n+')';
+  document.getElementById('dockTotal').textContent=money(total());
+}
+function refresh(){ save(); renderGrid(); renderDock(); if(document.getElementById('sheet').classList.contains('on')&&view==='cart') renderSheet(); }
+
+/* ---- Panel del pedido ---- */
+var view='cart', customer={};
+try{ customer=JSON.parse(localStorage.getItem('pd_cust')||'{}')||{}; }catch(e){ customer={}; }
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function renderSheet(){
+  var b=document.getElementById('sheetBody');
+  if(view==='ok'){ return; }
+  var keys=Object.keys(cart);
+  if(!keys.length){
+    b.innerHTML='<h2>Tu pedido está vacío</h2><p class="note">Volvé al catálogo y elegí lo que necesitás.</p><button class="send" type="button" id="back2">Ver productos</button>';
+    document.getElementById('back2').onclick=closeSheet; return;
+  }
+  var lines=keys.map(function(k){var p=P[k],q=cart[k];
+    return '<div class="line"><div class="t">'+(photo(p)?'<img src="'+photo(p)+'" alt="" onerror="this.remove()">':'')+'</div>'+
+    '<div><div class="n">'+p[0]+'</div><div class="p">'+money(p[1])+' c/u · '+money(p[1]*q)+'</div><button type="button" class="rm" data-rm="'+k+'">Quitar</button></div>'+
+    '<div class="qty"><button type="button" data-m="'+k+'" aria-label="Menos">−</button><span>'+q+'</span><button type="button" data-p="'+k+'" aria-label="Más">+</button></div></div>';}).join('');
+  var c=customer;
+  b.innerHTML=
+   '<h2>Mi pedido</h2><div class="lines">'+lines+'</div>'+
+   '<div class="total"><span>Total de productos</span><b>'+money(total())+'</b></div>'+
+   '<p class="note">El flete del envío por DAC no está incluido y lo paga el cliente al retirar.</p>'+
+   '<h2>Tus datos</h2>'+
+   '<form id="f" novalidate>'+
+    '<label class="f">Nombre y apellido<input type="text" id="nom" autocomplete="name" value="'+esc(c.nom)+'" required></label>'+
+    '<label class="f">Tu usuario de Instagram<small>Por ahí te escribimos con el link de pago</small><input type="text" id="ig" placeholder="@tuusuario" autocapitalize="none" autocorrect="off" value="'+esc(c.ig)+'" required></label>'+
+    '<label class="f">Teléfono de contacto<input type="tel" id="tel" autocomplete="tel" inputmode="tel" value="'+esc(c.tel)+'" required></label>'+
+    '<fieldset><legend>¿Cómo lo recibís?</legend>'+
+      '<label class="radio"><input type="radio" name="rec" value="ret" '+(c.rec!=='dac'?'checked':'')+'><span>Retiro en Montevideo<small>Sin costo</small></span></label>'+
+      '<label class="radio"><input type="radio" name="rec" value="dac" '+(c.rec==='dac'?'checked':'')+'><span>Envío por DAC<small>A todo el país. El flete lo pagás vos al retirar.</small></span></label></fieldset>'+
+    '<label class="f" id="dacBox" '+(c.rec==='dac'?'':'hidden')+'>Departamento y agencia donde retirás<input type="text" id="dac" value="'+esc(c.dac)+'" placeholder="Ej: Canelones, DAC Las Piedras"></label>'+
+    '<fieldset><legend>¿Cómo pagás?</legend>'+
+      '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago!=='tr'?'checked':'')+'><span>Mercado Pago<small>Te mandamos el link de pago</small></span></label>'+
+      '<label class="radio"><input type="radio" name="pago" value="tr" '+(c.pago==='tr'?'checked':'')+'><span>Transferencia BROU o Itaú<small>Te pasamos los datos de la cuenta</small></span></label></fieldset>'+
+    '<label class="f">Comentarios <small>Color, derecho o zurdo, lo que quieras aclarar</small><textarea id="com" rows="3"></textarea></label>'+
+    '<p class="err" id="err" role="alert" hidden></p>'+
+    '<button class="send" type="submit" id="sendBtn">Enviar pedido</button>'+
+    '<p class="note">No se cobra nada ahora. Te confirmamos stock y te escribimos por Instagram con el link de pago o los datos de transferencia.</p>'+
+   '</form>';
+  document.getElementById('f').onsubmit=submitOrder;
+  b.querySelectorAll('input[name=rec]').forEach(function(r){r.onchange=function(){document.getElementById('dacBox').hidden=(r.value!=='dac'||!r.checked);};});
+}
+
+function openSheet(){ view='cart'; document.getElementById('sheet').classList.add('on'); document.body.style.overflow='hidden'; renderSheet(); document.getElementById('sheet').scrollTop=0; }
+function closeSheet(){ document.getElementById('sheet').classList.remove('on'); document.body.style.overflow=''; }
+
+function postOne(fields, delay){
+  return new Promise(function(res){
+    setTimeout(function(){
+      var f=document.createElement('form'); f.method='POST'; f.action=FORM; f.target='sink'; f.style.display='none';
+      for(var k in fields){var i=document.createElement('input'); i.type='hidden'; i.name=k; i.value=fields[k]; f.appendChild(i);}
+      document.body.appendChild(f); f.submit(); setTimeout(function(){f.remove(); res();},700);
+    }, delay);
+  });
+}
+
+function submitOrder(ev){
+  ev.preventDefault();
+  var g=function(id){var e=document.getElementById(id); return e?e.value.trim():'';};
+  var rec=document.querySelector('input[name=rec]:checked').value, pago=document.querySelector('input[name=pago]:checked').value;
+  var err=document.getElementById('err'); err.hidden=true;
+  var ig=g('ig'); if(ig && ig.charAt(0)!=='@') ig='@'+ig;
+  if(!g('nom')||!ig||ig==='@'||!g('tel')){ err.textContent='Completá nombre, usuario de Instagram y teléfono.'; err.hidden=false; return; }
+  if(rec==='dac' && !g('dac')){ err.textContent='Indicá el departamento y la agencia DAC donde retirás.'; err.hidden=false; return; }
+  customer={nom:g('nom'),ig:ig,tel:g('tel'),rec:rec,dac:g('dac'),pago:pago};
+  try{localStorage.setItem('pd_cust',JSON.stringify(customer));}catch(e){}
+  var btn=document.getElementById('sendBtn'); btn.disabled=true; btn.textContent='Enviando...';
+  var keys=Object.keys(cart), n=keys.length, tot=total(), com=g('com'), chain=Promise.resolve();
+  keys.forEach(function(k,idx){
+    var f={};
+    f[E.prod]=optText(P[k]); f[E.cant]=String(cart[k]);
+    f[E.ig]=ig; f[E.nom]=customer.nom; f[E.tel]=customer.tel;
+    f[E.rec]=REC[rec]; if(rec==='dac') f[E.dac]=customer.dac;
+    f[E.pago]=PAGO[pago];
+    f[E.com]=(n>1?'[Pedido de '+n+' productos, '+(idx+1)+'/'+n+', total '+money(tot)+'] ':'')+com;
+    chain=chain.then(function(){return postOne(f, idx?250:0);});
+  });
+  chain.then(function(){
+    view='ok'; cart={}; save(); renderGrid(); renderDock();
+    document.getElementById('sheetBody').innerHTML='<div class="ok"><div class="tick">&#10003;</div><h2>Recibimos tu pedido</h2>'+
+      '<p>Te escribimos por Instagram a <b>'+esc(ig)+'</b> con '+(pago==='mp'?'el link de pago de Mercado Pago':'los datos para la transferencia')+'.</p>'+
+      '<p class="note">Si en unas horas no te llega el mensaje, escribinos a <a href="https://www.instagram.com/precio.directo/" target="_blank" rel="noopener">@precio.directo</a>.</p>'+
+      '<button class="send" type="button" id="again">Volver al catálogo</button></div>';
+    document.getElementById('again').onclick=closeSheet;
+    document.getElementById('sheet').scrollTop=0;
+  });
+}
+
+/* ---- Eventos ---- */
+document.getElementById('grid').addEventListener('click',function(e){
+  var b=e.target.closest('.add'); if(!b) return; var i=b.dataset.i; cart[i]=(cart[i]||0)+1; refresh();
+});
+document.getElementById('chips').addEventListener('click',function(e){
+  var b=e.target.closest('.chip'); if(!b) return; cat=b.dataset.c; renderChips(); renderGrid();
+});
+document.getElementById('q').addEventListener('input',function(e){ term=e.target.value; renderGrid(); });
+document.getElementById('openCart').onclick=openSheet;
+document.getElementById('dockBtn').onclick=openSheet;
+document.getElementById('close').onclick=closeSheet;
+document.getElementById('sheetBody').addEventListener('click',function(e){
+  var t=e.target, k;
+  if((k=t.getAttribute('data-p'))!==null){ cart[k]++; refresh(); }
+  else if((k=t.getAttribute('data-m'))!==null){ cart[k]--; if(cart[k]<=0) delete cart[k]; refresh(); }
+  else if((k=t.getAttribute('data-rm'))!==null){ delete cart[k]; refresh(); }
+});
+
+/* limpiar carrito guardado con índices inválidos */
+Object.keys(cart).forEach(function(k){ if(!P[k]||!(cart[k]>0)) delete cart[k]; });
+renderChips(); renderGrid(); renderDock();
+</script>
+</body>
+</html>
