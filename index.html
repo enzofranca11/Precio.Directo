@@ -340,11 +340,11 @@ function renderSheet(){
     '<label class="f" id="dacBox" '+(c.rec==='dac'?'':'hidden')+'>Departamento y agencia donde retirás<input type="text" id="dac" value="'+esc(c.dac)+'" placeholder="Ej: Canelones, DAC Las Piedras"></label>'+
     '<fieldset><legend>¿Cómo pagás?</legend>'+
       '<label class="radio"><input type="radio" name="pago" value="tr" '+(c.pago!=='mp'?'checked':'')+'><span>Transferencia BROU o Itaú<small>Precio de lista. Te pasamos los datos de la cuenta</small></span></label>'+
-      '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago==='mp'?'checked':'')+'><span>Mercado Pago<small>10% más. Te mandamos el link de pago</small></span></label></fieldset>'+
+      '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago==='mp'?'checked':'')+'><span>Mercado Pago<small>10% más. Te mandamos el código QR de Mercado Pago</small></span></label></fieldset>'+
     '<label class="f">Comentarios <small>Color, derecho o zurdo, lo que quieras aclarar</small><textarea id="com" rows="3"></textarea></label>'+
     '<p class="err" id="err" role="alert" hidden></p>'+
     '<button class="send" type="submit" id="sendBtn">Enviar pedido</button>'+
-    '<p class="note">No se cobra nada ahora. Te confirmamos stock y te escribimos por Instagram con los datos de transferencia o el link de pago de Mercado Pago (10% más).</p>'+
+    '<p class="note">No se cobra nada ahora. Te confirmamos stock y te escribimos por Instagram con los datos de transferencia o el código QR de Mercado Pago (10% más).</p>'+
    '</form>';
   document.getElementById('f').onsubmit=submitOrder;
   b.querySelectorAll('input[name=rec]').forEach(function(r){r.onchange=function(){document.getElementById('dacBox').hidden=(r.value!=='dac'||!r.checked);};});
@@ -387,7 +387,7 @@ function submitOrder(ev){
   chain.then(function(){
     view='ok'; cart={}; save(); renderGrid(); renderDock();
     document.getElementById('sheetBody').innerHTML='<div class="ok"><div class="tick">&#10003;</div><h2>Recibimos tu pedido</h2>'+
-      '<p>Te escribimos por Instagram a <b>'+esc(ig)+'</b> con '+(pago==='mp'?'el link de pago de Mercado Pago':'los datos para la transferencia')+'.</p>'+
+      '<p>Te escribimos por Instagram a <b>'+esc(ig)+'</b> con '+(pago==='mp'?'el código QR de Mercado Pago':'los datos para la transferencia')+'.</p>'+
       '<p class="note">Si en unas horas no te llega el mensaje, escribinos a <a href="https://www.instagram.com/precio.directo/" target="_blank" rel="noopener">@precio.directo</a>.</p>'+
       '<button class="send" type="button" id="again">Volver al catálogo</button></div>';
     document.getElementById('again').onclick=closeSheet;
