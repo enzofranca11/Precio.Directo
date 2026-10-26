@@ -60,12 +60,37 @@ header{background:var(--brand-dark);color:#fff;position:sticky;top:0;z-index:20;
 .info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .name{font-weight:600;font-size:15px;line-height:1.25;min-height:2.5em;overflow-wrap:anywhere}
 .price{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;letter-spacing:.01em}
-.price small{font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);margin-left:4px;letter-spacing:0}
+.mpr{font-size:12.5px;color:var(--muted);margin:-2px 0 4px;white-space:nowrap}
+.total.mpt{border-top:0;padding-top:4px;color:var(--muted);font-size:14px}
+.total.mpt b{font-size:20px}
+.price small{display:block;font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted);margin:4px 0 0;letter-spacing:0}
 .opt{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff;font-size:14px}
 .add{margin-top:auto;border:0;background:var(--brand);color:#fff;border-radius:9px;padding:11px;font-weight:600;cursor:pointer}
 .add:active{transform:scale(.98)}
 .add.done{background:var(--ok)}
 .empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+
+/* detalle de producto */
+.ph[data-d],.name[data-d]{cursor:pointer}
+.more{background:none;border:0;padding:0;color:var(--brand);font-weight:600;font-size:13.5px;text-align:left;cursor:pointer;text-decoration:underline}
+.det{z-index:45}
+.gal{position:relative;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.gal .strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gal .strip::-webkit-scrollbar{display:none}
+.gal .slide{flex:none;width:100%;aspect-ratio:1/1;scroll-snap-align:center;display:grid;place-items:center}
+.gal .slide img{width:100%;height:100%;object-fit:contain;padding:10px}
+.gal .cnt{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-size:12.5px;border-radius:999px;padding:3px 10px}
+.dh{font-family:var(--display);font-size:28px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;margin:0}
+.dprice{display:grid;gap:2px}
+.dprice b{font-family:var(--display);font-size:38px;line-height:1}
+.dprice span{color:var(--muted);font-size:14px}
+.dprice .mp{color:var(--ink);font-weight:600;font-size:16px;margin-top:4px}
+.dl{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.dl li{position:relative;padding-left:20px;font-size:15.5px;line-height:1.4}
+.dl li:before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.detbar{position:sticky;bottom:0;display:grid;gap:8px;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom));margin-top:4px}
+.detbar .send.alt{background:#fff;color:var(--brand);border:2px solid var(--brand)}
 
 /* barra inferior */
 .dock{position:fixed;left:0;right:0;bottom:0;background:var(--brand-dark);padding:10px max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));z-index:25;transform:translateY(110%);transition:transform .22s}
@@ -127,11 +152,11 @@ footer a{color:var(--brand);font-weight:600}
 <section class="hero">
   <div class="wrap">
     <h1>Camping y pesca <span>al mejor precio</span></h1>
-    <p>Elegí lo que necesitás, armá tu pedido y te escribimos por Instagram con el link de pago.</p>
+    <p>Elegí lo que necesitás, armá tu pedido y te escribimos por Instagram con los datos de pago. Los precios son por transferencia; con Mercado Pago es un 10% más.</p>
     <ul class="points">
       <li>Retiro en Montevideo</li>
       <li>Envíos a todo el país por DAC</li>
-      <li>Mercado Pago o transferencia</li>
+      <li>Transferencia o Mercado Pago (+10%)</li>
     </ul>
   </div>
 </section>
@@ -147,7 +172,7 @@ footer a{color:var(--brand);font-weight:600}
 <footer>
   <div class="wrap">
     Precio Directo en Instagram: <a href="https://www.instagram.com/precio.directo/" target="_blank" rel="noopener">@precio.directo</a>.
-    Los precios son en pesos uruguayos y el flete del envío lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.
+    Los precios son en pesos uruguayos, por transferencia; pagando con Mercado Pago son un 10% más. El flete del envío lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.
   </div>
 </footer>
 
@@ -161,6 +186,16 @@ footer a{color:var(--brand);font-weight:600}
     </div>
   </header>
   <div class="body" id="sheetBody"></div>
+</div>
+
+<div class="sheet det" id="det" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+  <header>
+    <div class="wrap bar">
+      <button class="back" id="detClose" type="button">&larr; Volver</button>
+      <div class="logo" style="font-size:22px">Precio Directo</div>
+    </div>
+  </header>
+  <div class="body" id="detBody"></div>
 </div>
 
 <iframe name="sink" id="sink" title="envio" style="display:none" tabindex="-1"></iframe>
@@ -177,7 +212,7 @@ var CDN = 'https://cdn.shopify.com/s/files/1/0994/8335/3404/files/';
 var P = [
  ['Binoculares 20-180x100',6160,'Óptica','ChatGPT_Image_13_sept_2026_03_05_43_p.m..png','Más pedido'],
  ['Binoculares 10-70x70',3330,'Óptica','ChatGPT_Image_13_sept_2026_02_38_27_p.m..png'],
- ['Telescopio 60x con trípode',2510,'Óptica',''],
+ ['Telescopio 60x con trípode',2510,'Óptica','https://www.diego.com.uy/productos/imgs/telescopio-astronomico-60x-con-tripode-57161-3.jpg'],
  ['Mochila 65 L',2380,'Camping','original_57106.jpg'],
  ['Mochila 85 L',1890,'Camping','original_43776.jpg'],
  ['Reel Cadence 7.3 (derecho o zurdo)',6390,'Pesca','Czn1V.jpg'],
@@ -211,19 +246,20 @@ var P = [
  ['Lona 8x12',3150,'Sombra y lonas','productos35_11534.jpg'],
  ['Malla de sombra camuflada 3x3',1530,'Sombra y lonas','productos35_3684.jpg'],
  ['Gazebo 2x2',3020,'Gazebos','Uhk8n.jpg'],
- ['Gazebo 3x3 azul',3240,'Gazebos',''],
- ['Gazebo 3x3 verde',3240,'Gazebos',''],
+ ['Gazebo 3x3 azul',3240,'Gazebos','gazebo_azul.png'],
+ ['Gazebo 3x3 verde',3240,'Gazebos','OlqDq.jpg'],
  ['Gazebo 3x6',6390,'Gazebos','original_25336.jpg'],
  ['Gazebo sombrilla 185',3150,'Gazebos','CHGvm.jpg'],
  ['Pared de gazebo 1,90x9',1710,'Gazebos','r0PdN.jpg'],
  ['Pared de gazebo roja 1,90x12',2250,'Gazebos','original_25313.jpg'],
  ['Stand up paddle azul o rojo',11090,'Agua','ChatGPT_Image_13_sept_2026_02_48_29_p.m..png']
 ];
+var D = [{"l":["Zoom de 20 a 180 x 100","Amplio campo de visión","Lente objetivo grande de 2,756 pulgadas, multicapa, con cristal sin plomo y revestimientos antirreflectantes: 99,5% de transmisión de luz","Enfoque central suave y goma antideslizante","Visión diurna y nocturna","Tuerca adaptadora para trípode incorporada","Incluye funda de transporte, paño de limpieza y correa para el cuello"],"i":["ChatGPT_Image_13_sept_2026_03_05_43_p.m..png","original_6703.jpg","original_26117.jpg","original_26118.jpg"]},{"l":["Zoom de 10 a 70 x 70","Película multicapa FMC: imágenes más brillantes y de mayor contraste","Goma antideslizante","Visión de día y de noche","Color negro. Puede ser resistente al agua (no apto para buceo)","Medidas aprox.: 18 x 18 x 7 cm","Incluye funda de transporte, paño de limpieza y correa para el cuello"],"i":["ChatGPT_Image_13_sept_2026_02_38_27_p.m..png","original_6701.jpg","original_6702.jpg"]},{"l":["Telescopio astronómico de 60 aumentos","Incluye trípode","Incluye adaptador para celular"],"i":["https://www.diego.com.uy/productos/imgs/telescopio-astronomico-60x-con-tripode-57161-3.jpg"]},{"l":["Capacidad: 65 litros","Medidas: 53 x 35 x 16 cm","5 bolsillos con cierre","Material resistente","Color verde camuflado"],"i":["original_57106.jpg"]},{"l":["Capacidad: 85 litros","Medidas: 67 x 39 x 16 cm","4 bolsillos con cierre y 2 bolsillos laterales para botellas","Cinturón lumbar acolchado y correas de compresión laterales","Ideal para trekking, camping y viajes largos","Material resistente, costuras reforzadas","Colores: azul, rojo o negro (indicá el color en los comentarios)"],"i":["original_43776.jpg","original_43775.jpg","original_43777.jpg"]},{"l":["Reel rotativo Cadence Essence, derecho o zurdo (indicalo en los comentarios)","Relación de transmisión 7.3:1","Peso máximo 9 kg","28 pulgadas por vuelta","7 rodamientos de acero inoxidable + 1 antirretroceso","Arrastre y freno de fibra de carbono","Frenos magnéticos externos ajustables","Carrete de aluminio mecanizado, marco y placas de grafito","Medidas: 13 x 10 cm. Viene en caja"],"i":["Czn1V.jpg","O7yGr.jpg","original_35057.jpg"]},{"l":["Reel rotativo Cadence Vertix, derecho o zurdo (indicalo en los comentarios)","Relación de transmisión 6.6:1","Peso máximo 5,4 kg (12 lb)","28 pulgadas por vuelta","9 rodamientos de acero inoxidable + 1 antirretroceso instantáneo","Arrastre y freno de fibra de carbono","Perillas ergonómicas de EVA de gran tamaño","Frenos magnéticos externos ajustables","Carrete de aluminio mecanizado, marco y placas de grafito","Medidas: 13 x 10 cm. Viene en caja"],"i":["r5bep.jpg","Xgmq6.jpg","original_35178.jpg"]},{"l":["Reel rotativo Tempo Resolute, derecho o zurdo (indicalo en los comentarios)","Relación de transmisión 7.3:1","Peso máximo 5,4 kg (12 lb)","9 rodamientos de acero inoxidable + 1 antirretroceso instantáneo","Arrastre y freno de fibra de carbono","Perillas ergonómicas de EVA de gran tamaño","Frenos magnéticos externos ajustables","Carrete de aluminio mecanizado, marco y placas de grafito","Medidas: 13 x 10 cm. Viene en caja"],"i":["gbyVy.jpg","pUdlS.jpg","original_35243.jpg","original_35246.jpg"]},{"l":["Reel giratorio de brazo plegable, en plateado o negro (indicalo en los comentarios)","Relación de transmisión 4.9:1","Peso máximo 15 kg","Brazo de metal plegable, intercambiable para zurdo o derecho","Liviano y resistente a la corrosión","Sistema de oscilación de línea superior","Medidas: 20 x 16 cm","Capacidad de línea AQ10000: 0,40/370 · 0,45/290 · 0,65/260"],"i":["productos35_35195.jpg","productos35_35184.jpg"]},{"l":["Reel giratorio de brazo plegable, en plateado o negro (indicalo en los comentarios)","Relación de transmisión 4.9:1","Peso máximo 15 kg","Brazo de metal plegable, intercambiable para zurdo o derecho","Liviano y resistente a la corrosión","Sistema de oscilación de línea superior","Medidas: 20 x 16 cm","Capacidad de línea AQ9000: 0,40/360 · 0,45/280 · 0,60/220"],"i":["productos35_35195.jpg","productos35_35184.jpg"]},{"l":["Reel giratorio de brazo plegable, en plateado o negro (indicalo en los comentarios)","Relación de transmisión 4.9:1","Peso máximo 15 kg","Brazo de metal plegable, intercambiable para zurdo o derecho","Liviano y resistente a la corrosión","Sistema de oscilación de línea superior","Medidas: 20 x 16 cm","Capacidad de línea AQ8000: 0,40/350 · 0,45/270 · 0,55/180"],"i":["productos35_35195.jpg","productos35_35184.jpg"]},{"l":["Caña extensible de fibra de vidrio y carbono","Largo: 3 m. Plegada mide 70 cm","Anillos de acero inoxidable","Incluye funda de tela para guardarla y transportarla"],"i":["productos35_34956.jpg","productos35_34953.jpg","productos35_34980.jpg"]},{"l":["Caña extensible de fibra de vidrio y carbono","Largo: 3,60 m. Plegada mide 77 cm","Anillos de acero inoxidable","Incluye funda de tela para guardarla y transportarla"],"i":["productos35_34956.jpg","productos35_34953.jpg","productos35_34980.jpg"]},{"l":["Caña de fibra con revestimiento de PVC, verde camuflado","Largo: 3,60 m, cuatro tramos encastrables","Incluye 3 punteras intercambiables de distinto espesor","Anillos de acero inoxidable","Mango de goma antideslizante","Viene en bolsa"],"i":["productos35_35051.jpg","productos35_35055.jpg"]},{"l":["Carpa Vigore autoarmable para 3 personas","Medidas armada: 150 x 200 x 110 cm","Armado automático con varillas de fibra de vidrio","Doble puerta, ventilación y mosquitero","Piso de polietileno reforzado","Poliéster impermeable con recubrimiento de poliuretano","Incluye 4 estacas de metal, cuerdas y bolso de transporte"],"i":["9NpLD.jpg","dNV8H.jpg","original_53198.jpg"]},{"l":["Carpa Vigore autoarmable para 4 personas","Armado automático","Doble puerta, ventilación y mosquitero","Piso de polietileno reforzado","Material impermeable","Consultanos las medidas exactas antes de pedir"],"i":["9NpLD.jpg"]},{"l":["Carpa iglú Vigore para 6 personas","Medidas armada: 220 x 250 x 140 cm","Piso de polietileno resistente","Doble apertura, interior y exterior","Ventilación con mosquitero","Incluye 4 estacas de metal","Colores: beige y azul, o naranja y verde (indicalo en los comentarios)"],"i":["productos35_53174.jpg","productos35_53185.jpg"]},{"l":["Catre de aluminio plegable","Desplegado: 181 x 62 x 43 cm. Plegado: 94 x 12 cm","Viene en bolsa transportable","Soporta hasta 120 kg","Superficie de tela Oxford, fácil de limpiar","Marco de aluminio liviano y fuerte, con topes de plástico antideslizantes","Colores: verde, celeste o azul (indicalo en los comentarios)"],"i":["original_25187.jpg","original_25186.jpg"]},{"l":["Colchón inflable para auto","Medidas: 130 x 84 x 35 cm","Incluye inflador eléctrico con adaptador de 12 V","Colores: negro o gris (indicalo en los comentarios)","Los productos inflables no tienen cambio"],"i":["oKpYZ.jpg","original_22563.jpg","original_22786.jpg","original_3301.jpg"]},{"l":["Mesa plegable de acero y plástico, lavable","Ancho 90 cm, profundidad 60 cm, alto 74 cm","Se pliega tipo maleta y se lleva de la manija"],"i":["productos35_16950.jpg","productos35_26001.jpg"]},{"l":["Mesa plegable de acero y plástico, lavable","Ancho 120 cm, profundidad 60 cm, alto 74 cm"],"i":["productos35_16950.jpg","productos35_26001.jpg"]},{"l":["Mesa plegable tipo maleta, de acero y plástico, lavable","Medidas: 120 x 60 x 55 cm","Incluye 4 bancos plegables (27 x 30 x 35 cm)","Viene en caja"],"i":["ChatGPT_Image_13_sept_2026_02_39_50_p.m..png","original_37435.jpg"]},{"l":["Mesa plegable y transportable, con 4 bancos y valija","Mesa de 85 x 65 cm, para 4 personas","Montaje simple y rápido","Valija cerrada: 32 x 85 x 10 cm","Ideal para playa y camping"],"i":["eHhf2.jpg","wnT1B.jpg"]},{"l":["Carrito plegable con ruedas","Medidas armado: 76 x 46 x 48 cm","Ruedas delanteras giratorias 360°","Bolsillos exteriores y mango retráctil","Carga hasta 70 kg","Marco de tubo de acero grueso","Color negro. Peso aprox. 5,78 kg"],"i":["original_27731.jpg","original_27729.jpg","original_27730.jpg","original_29923.jpg"]},{"l":["Carrito plegable con ruedas","Medidas armado: 88 x 47 x 55 cm","Ruedas delanteras giratorias 360°","Bolsillos exteriores y mango retráctil","Carga hasta 70 kg","Marco de tubo de acero grueso","Color negro. Peso aprox. 5,78 kg"],"i":["original_53271.jpg","original_53269.jpg","original_53270.jpg"]},{"l":["Ventilador inalámbrico con cargador solar","Panel solar de 9 V y 3 W","Puerto USB para cargar el celular","Incluye 2 bombitas LED que funcionan conectadas al ventilador, y luz de emergencia integrada","Autonomía: 4 horas a velocidad alta, 8 horas a baja","Medidas: 28 x 48 x 34 cm. Viene en caja"],"i":["SlyQ1.jpg","original_28193.jpg"]},{"l":["Lona de sombra impermeable, cuadrada de 3 x 3 m","Protección UV del 98% y sombreado del 90%","Tela de poliéster con revestimiento de PU","Anillo de acero inoxidable para tensar","Para patio, terraza o camping","Colores: bordó, beige, crema, verde, gris o arena. Dependen del stock del día: escribinos si necesitás uno en particular"],"i":["productos35_16274.jpg","productos35_16275.jpg","productos35_16287.jpg"]},{"l":["Lona de sombra impermeable, cuadrada de 4 x 4 m","Protección UV del 98% y sombreado del 90%","Tela de poliéster con revestimiento de PU","Anillo de acero inoxidable para tensar","Para patio, terraza o camping","Colores: bordó, beige, crema, verde, gris o arena. Dependen del stock del día: escribinos si necesitás uno en particular"],"i":["wyQAr.jpg"]},{"l":["Lona de sombra impermeable, triangular de 3,6 m de lado","Protección UV del 98% y sombreado del 90%","Tela de poliéster con revestimiento de PU","Anillo de acero inoxidable para tensar","Para patio, terraza o camping","Colores: bordó, beige, crema, verde, gris o arena. Dependen del stock del día: escribinos si necesitás uno en particular"],"i":["productos35_16274.jpg","productos35_16275.jpg","productos35_16287.jpg"]},{"l":["Lona de sombra impermeable, triangular de 4 m de lado","Protección UV del 98% y sombreado del 90%","Tela de poliéster con revestimiento de PU","Anillo de acero inoxidable para tensar","Para patio, terraza o camping","Colores: bordó, beige, crema, verde, gris o arena. Dependen del stock del día: escribinos si necesitás uno en particular"],"i":["productos35_16274.jpg","productos35_16275.jpg","productos35_16287.jpg"]},{"l":["Lona 4 x 6 metros","Lona plástica azul","Ojales en todo el perímetro para atar o tensar","Sirve para cubrir, tapar o armar sombra"],"i":["productos35_11534.jpg","productos35_11532.jpg","productos35_11535.jpg"]},{"l":["Lona 5 x 6 metros","Lona plástica azul","Ojales en todo el perímetro para atar o tensar","Sirve para cubrir, tapar o armar sombra"],"i":["productos35_11534.jpg","productos35_11532.jpg","productos35_11535.jpg"]},{"l":["Lona plástica azul","Medidas: 6 x 8 metros"],"i":["original_11536.jpg"]},{"l":["Lona 8 x 12 metros","Lona plástica azul","Ojales en todo el perímetro para atar o tensar","Sirve para cubrir, tapar o armar sombra"],"i":["productos35_11534.jpg","productos35_11532.jpg","productos35_11535.jpg"]},{"l":["Malla de sombra verde camuflada de 3 x 3 metros, tela oxford","Sombreado del 70%","Impermeable, de secado rápido, anticorrosión y antimoho","Pesa alrededor de 1 kilo"],"i":["productos35_3684.jpg","productos35_19347.jpg"]},{"l":["Armado: 2 x 2 m","Gazebo plegable con toldo de lona impermeable","Lona PVC Oxford 420D","Estructura metálica negro martillado","Práctico de abrir y cerrar","Viene en caja","Medidas de la caja: 148 x 18,5 x 18,5 cm","Color blanco"],"i":["Uhk8n.jpg","nLB03.jpg"]},{"l":["Armado: 3 x 3 m","Gazebo plegable con toldo de lona impermeable","Lona PVC Oxford 420D","Estructura metálica negro martillado","Práctico de abrir y cerrar","Viene en caja","Color azul"],"i":["gazebo_azul.png"]},{"l":["Armado: 3 x 3 m","Gazebo plegable con toldo de lona impermeable","Lona PVC Oxford 420D","Estructura metálica negro martillado","Práctico de abrir y cerrar","Viene en caja","Color verde"],"i":["OlqDq.jpg"]},{"l":["Armado: 3 x 6 m","Gazebo plegable con toldo de lona impermeable","Lona PVC Oxford 420D","Estructura metálica negro martillado","Práctico de abrir y cerrar","Viene en caja","Colores: blanco, rojo, azul o verde (indicalo en los comentarios)"],"i":["original_25336.jpg","PbOYu.jpg"]},{"l":["Gazebo sombrilla plegable rectangular, con mecanismo tipo paraguas","Alto: 2,3 m. Ancho: 185 x 185 cm","Poste central de acero, 2 tramos encastrables y 2 alturas ajustables","4 patas de tela con bolsillos para llenar con arena y estabilizar","Cubierta de poliéster impermeable: protege del sol y de lluvias ligeras","Viene en funda para transportar"],"i":["CHGvm.jpg","A3nhb.jpg"]},{"l":["Pared para gazebo plegable, de 3 lados","Medida: 1,90 x 9 m","Tela de poliéster Oxford 210 D","Se sujeta con tiras","Colores: blanco o azul (indicalo en los comentarios)"],"i":["r0PdN.jpg","0uHAc.jpg"]},{"l":["Pared para gazebo plegable","Medida: 1,90 x 12 m","Color rojo","Tela de poliéster Oxford 210 D","Se sujeta con tiras"],"i":["original_25313.jpg"]},{"l":["Tabla de stand up paddle inflable con kit completo, marca Koetsu","Incluye tabla, remo de aluminio ajustable (165 a 205 cm), aleta extraíble, leash, bomba manual, parches y mochila de transporte de 80 litros","Largo: 3,2 m. Ancho máx.: 78 cm. Alto sin la aleta: 15 cm","Carga máxima: alrededor de 130 kg","PVC duradero con cubierta de EVA antideslizante","Presión de inflado recomendada: 10-15 PSI (sugerida 12 PSI)","Colores: azul o rojo (indicalo en los comentarios)"],"i":["ChatGPT_Image_13_sept_2026_02_48_29_p.m..png","original_49452.jpg","original_49453.jpg","original_49451.jpg"]}];
 var CATS = ['Todo','Pesca','Camping','Óptica','Sombra y lonas','Gazebos','Agua'];
 
 function money(n){return '$'+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
 function optText(p){return p[0]+' - '+money(p[1]);}
-function photo(p){return p[3]?CDN+p[3]:'';}
+function photo(p){return p[3]?(/^https?:/.test(p[3])?p[3]:CDN+p[3]):'';}
 
 var cart = {};   // índice de producto -> cantidad
 try{ cart = JSON.parse(localStorage.getItem('pd_cart')||'{}')||{}; }catch(e){ cart={}; }
@@ -231,6 +267,8 @@ var cat='Todo', term='';
 
 function save(){ try{localStorage.setItem('pd_cart',JSON.stringify(cart));}catch(e){} }
 function count(){ var n=0; for(var k in cart) n+=cart[k]; return n; }
+function mpp(p){return Math.round(p[1]*1.1/10)*10;}
+function totalMP(){ var t=0; for(var k in cart) t+=cart[k]*mpp(P[k]); return t; }
 function total(){ var t=0; for(var k in cart) t+=cart[k]*P[k][1]; return t; }
 function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
 
@@ -250,9 +288,10 @@ function renderGrid(){
     if(cat!=='Todo' && p[2]!==cat) return;
     if(t && norm(p[0]).indexOf(t)<0 && norm(p[2]).indexOf(t)<0) return;
     var inCart=cart[i]||0;
-    out.push('<article class="card"><div class="ph">'+(p[4]?'<span class="tag">'+p[4]+'</span>':'')+imgTag(p)+'</div>'+
-      '<div class="info"><div class="name">'+p[0]+'</div>'+
-      '<div class="price">'+money(p[1])+'</div>'+
+    out.push('<article class="card"><div class="ph" data-d="'+i+'" role="button" tabindex="0" aria-label="Ver detalle de '+p[0]+'">'+(p[4]?'<span class="tag">'+p[4]+'</span>':'')+imgTag(p)+'</div>'+
+      '<div class="info"><div class="name" data-d="'+i+'">'+p[0]+'</div>'+
+      '<div class="price">'+money(p[1])+'<small>por transferencia</small></div><div class="mpr">Mercado Pago '+money(mpp(p))+'</div>'+
+      '<button type="button" class="more" data-d="'+i+'">Ver detalle</button>'+
       '<button type="button" class="add'+(inCart?' done':'')+'" data-i="'+i+'">'+(inCart?'En tu pedido ('+inCart+') · sumar':'Agregar al pedido')+'</button></div></article>');
   });
   g.innerHTML=out.length?out.join(''):'<div class="empty">No encontramos ese producto. Probá con otra palabra o escribinos por Instagram.</div>';
@@ -287,24 +326,25 @@ function renderSheet(){
   var c=customer;
   b.innerHTML=
    '<h2>Mi pedido</h2><div class="lines">'+lines+'</div>'+
-   '<div class="total"><span>Total de productos</span><b>'+money(total())+'</b></div>'+
+   '<div class="total"><span>Total por transferencia</span><b>'+money(total())+'</b></div>'+
+   '<div class="total mpt"><span>Total con Mercado Pago (10% más)</span><b>'+money(totalMP())+'</b></div>'+
    '<p class="note">El flete del envío por DAC no está incluido y lo paga el cliente al retirar.</p>'+
    '<h2>Tus datos</h2>'+
    '<form id="f" novalidate>'+
     '<label class="f">Nombre y apellido<input type="text" id="nom" autocomplete="name" value="'+esc(c.nom)+'" required></label>'+
-    '<label class="f">Tu usuario de Instagram<small>Por ahí te escribimos con el link de pago</small><input type="text" id="ig" placeholder="@tuusuario" autocapitalize="none" autocorrect="off" value="'+esc(c.ig)+'" required></label>'+
+    '<label class="f">Tu usuario de Instagram<small>Por ahí te escribimos con los datos de pago</small><input type="text" id="ig" placeholder="@tuusuario" autocapitalize="none" autocorrect="off" value="'+esc(c.ig)+'" required></label>'+
     '<label class="f">Teléfono de contacto<input type="tel" id="tel" autocomplete="tel" inputmode="tel" value="'+esc(c.tel)+'" required></label>'+
     '<fieldset><legend>¿Cómo lo recibís?</legend>'+
       '<label class="radio"><input type="radio" name="rec" value="ret" '+(c.rec!=='dac'?'checked':'')+'><span>Retiro en Montevideo<small>Sin costo</small></span></label>'+
       '<label class="radio"><input type="radio" name="rec" value="dac" '+(c.rec==='dac'?'checked':'')+'><span>Envío por DAC<small>A todo el país. El flete lo pagás vos al retirar.</small></span></label></fieldset>'+
     '<label class="f" id="dacBox" '+(c.rec==='dac'?'':'hidden')+'>Departamento y agencia donde retirás<input type="text" id="dac" value="'+esc(c.dac)+'" placeholder="Ej: Canelones, DAC Las Piedras"></label>'+
     '<fieldset><legend>¿Cómo pagás?</legend>'+
-      '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago!=='tr'?'checked':'')+'><span>Mercado Pago<small>Te mandamos el link de pago</small></span></label>'+
-      '<label class="radio"><input type="radio" name="pago" value="tr" '+(c.pago==='tr'?'checked':'')+'><span>Transferencia BROU o Itaú<small>Te pasamos los datos de la cuenta</small></span></label></fieldset>'+
+      '<label class="radio"><input type="radio" name="pago" value="tr" '+(c.pago!=='mp'?'checked':'')+'><span>Transferencia BROU o Itaú<small>Precio de lista. Te pasamos los datos de la cuenta</small></span></label>'+
+      '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago==='mp'?'checked':'')+'><span>Mercado Pago<small>10% más. Te mandamos el link de pago</small></span></label></fieldset>'+
     '<label class="f">Comentarios <small>Color, derecho o zurdo, lo que quieras aclarar</small><textarea id="com" rows="3"></textarea></label>'+
     '<p class="err" id="err" role="alert" hidden></p>'+
     '<button class="send" type="submit" id="sendBtn">Enviar pedido</button>'+
-    '<p class="note">No se cobra nada ahora. Te confirmamos stock y te escribimos por Instagram con el link de pago o los datos de transferencia.</p>'+
+    '<p class="note">No se cobra nada ahora. Te confirmamos stock y te escribimos por Instagram con los datos de transferencia o el link de pago de Mercado Pago (10% más).</p>'+
    '</form>';
   document.getElementById('f').onsubmit=submitOrder;
   b.querySelectorAll('input[name=rec]').forEach(function(r){r.onchange=function(){document.getElementById('dacBox').hidden=(r.value!=='dac'||!r.checked);};});
@@ -341,7 +381,7 @@ function submitOrder(ev){
     f[E.ig]=ig; f[E.nom]=customer.nom; f[E.tel]=customer.tel;
     f[E.rec]=REC[rec]; if(rec==='dac') f[E.dac]=customer.dac;
     f[E.pago]=PAGO[pago];
-    f[E.com]=(n>1?'[Pedido de '+n+' productos, '+(idx+1)+'/'+n+', total '+money(tot)+'] ':'')+com;
+    f[E.com]=(n>1?'[Pedido de '+n+' productos, '+(idx+1)+'/'+n+'] ':'')+(pago==='mp'?'[Paga con Mercado Pago, total del pedido '+money(totalMP())+' (10% más)] ':'[Paga por transferencia, total del pedido '+money(tot)+'] ')+com;
     chain=chain.then(function(){return postOne(f, idx?250:0);});
   });
   chain.then(function(){
@@ -355,8 +395,43 @@ function submitOrder(ev){
   });
 }
 
+/* ---- Detalle de producto ---- */
+var detIdx=null, detPushed=false;
+function dphoto(f){return /^https?:/.test(f)?f:CDN+f;}
+function galFix(im){ var g=im.closest('.gal'); im.parentNode.remove(); if(g&&!g.querySelector('.slide')) g.remove(); var ct=document.getElementById('cnt'),n=document.querySelectorAll('#strip .slide').length; if(ct){ if(n>1) ct.textContent='1 / '+n; else ct.remove(); } }
+function renderDet(){
+  var i=detIdx, p=P[i], d=D[i], b=document.getElementById('detBody'), n=cart[i]||0, c=count();
+  var slides=d.i.map(function(f){return '<div class="slide"><img src="'+dphoto(f)+'" alt="'+esc(p[0])+'" loading="lazy" onerror="galFix(this)"></div>';}).join('');
+  b.innerHTML=
+   '<div class="gal"><div class="strip" id="strip">'+slides+'</div>'+(d.i.length>1?'<span class="cnt" id="cnt">1 / '+d.i.length+'</span>':'')+'</div>'+
+   '<h1 class="dh">'+esc(p[0])+'</h1>'+
+   '<div class="dprice"><b>'+money(p[1])+'</b><span>por transferencia</span><span class="mp">Mercado Pago '+money(mpp(p))+'</span></div>'+
+   '<ul class="dl">'+d.l.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+
+   '<p class="note">Retiro en Montevideo o envío por DAC a todo el país. El flete lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.</p>'+
+   '<div class="detbar"><button type="button" class="send" id="detAdd">'+(n?'Agregado ('+n+') · sumar otro':'Agregar al pedido')+'</button>'+
+   (c?'<button type="button" class="send alt" id="detCart">Ver mi pedido ('+c+')</button>':'')+'</div>';
+  var st=document.getElementById('strip'), ct=document.getElementById('cnt');
+  if(st&&ct) st.addEventListener('scroll',function(){ var k=Math.round(st.scrollLeft/st.clientWidth)+1; ct.textContent=k+' / '+d.i.length; });
+  document.getElementById('detAdd').onclick=function(){ cart[i]=(cart[i]||0)+1; save(); renderGrid(); renderDock(); renderDet(); };
+  var dc=document.getElementById('detCart'); if(dc) dc.onclick=function(){ hideDet(); openSheet(); };
+}
+function openDet(i){
+  detIdx=i; renderDet();
+  var s=document.getElementById('det'); s.classList.add('on'); s.scrollTop=0; document.body.style.overflow='hidden';
+  try{ history.pushState({det:1},''); detPushed=true; }catch(e){ detPushed=false; }
+}
+function hideDet(){ document.getElementById('det').classList.remove('on'); document.body.style.overflow=''; }
+function closeDet(){ if(detPushed){ detPushed=false; try{ history.back(); return; }catch(e){} } hideDet(); }
+window.addEventListener('popstate',function(){ detPushed=false; hideDet(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&document.getElementById('det').classList.contains('on')) closeDet(); });
+document.getElementById('detClose').onclick=closeDet;
+
 /* ---- Eventos ---- */
+document.getElementById('grid').addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ') return; var t=e.target.closest('.ph[data-d]'); if(t){ e.preventDefault(); openDet(+t.dataset.d); }
+});
 document.getElementById('grid').addEventListener('click',function(e){
+  var t=e.target.closest('[data-d]'); if(t){ openDet(+t.dataset.d); return; }
   var b=e.target.closest('.add'); if(!b) return; var i=b.dataset.i; cart[i]=(cart[i]||0)+1; refresh();
 });
 document.getElementById('chips').addEventListener('click',function(e){
