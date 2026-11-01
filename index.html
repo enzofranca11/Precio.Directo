@@ -154,7 +154,6 @@ footer a{color:var(--brand);font-weight:600}
     <h1>Camping y pesca <span>al mejor precio</span></h1>
     <p>Elegí lo que necesitás, armá tu pedido y te escribimos por Instagram con los datos de pago. Los precios son por transferencia; con Mercado Pago es un 10% más.</p>
     <ul class="points">
-      <li>Retiro en Montevideo</li>
       <li>Envíos a todo el país por DAC</li>
       <li>Transferencia o Mercado Pago (+10%)</li>
     </ul>
@@ -204,7 +203,7 @@ footer a{color:var(--brand);font-weight:600}
 /* ---- Configuración del formulario de Google (recibe los pedidos) ---- */
 var FORM = 'https://docs.google.com/forms/d/1E4CPu87LOXnyqmmaylFKaNVuZFRoafzhyEom5B_uzY0/formResponse';
 var E = {prod:'entry.1368549324',cant:'entry.1654063433',ig:'entry.951061040',nom:'entry.1243055395',tel:'entry.285504640',rec:'entry.1780050039',dac:'entry.618590131',pago:'entry.1724606907',com:'entry.551095706'};
-var REC = {ret:'Retiro en Montevideo', dac:'Envío por DAC'};
+var REC = {dac:'Envío por DAC'};
 var PAGO = {mp:'Mercado Pago (te mando el link)', tr:'Transferencia BROU o Itaú (te paso los datos)'};
 
 /* ---- Productos: [nombre, precio, categoría, foto, etiqueta] ---- */
@@ -335,9 +334,8 @@ function renderSheet(){
     '<label class="f">Tu usuario de Instagram<small>Por ahí te escribimos con los datos de pago</small><input type="text" id="ig" placeholder="@tuusuario" autocapitalize="none" autocorrect="off" value="'+esc(c.ig)+'" required></label>'+
     '<label class="f">Teléfono de contacto<input type="tel" id="tel" autocomplete="tel" inputmode="tel" value="'+esc(c.tel)+'" required></label>'+
     '<fieldset><legend>¿Cómo lo recibís?</legend>'+
-      '<label class="radio"><input type="radio" name="rec" value="ret" '+(c.rec!=='dac'?'checked':'')+'><span>Retiro en Montevideo<small>Sin costo</small></span></label>'+
-      '<label class="radio"><input type="radio" name="rec" value="dac" '+(c.rec==='dac'?'checked':'')+'><span>Envío por DAC<small>A todo el país. El flete lo pagás vos al retirar.</small></span></label></fieldset>'+
-    '<label class="f" id="dacBox" '+(c.rec==='dac'?'':'hidden')+'>Departamento y agencia donde retirás<input type="text" id="dac" value="'+esc(c.dac)+'" placeholder="Ej: Canelones, DAC Las Piedras"></label>'+
+      '<label class="radio"><input type="radio" name="rec" value="dac" checked><span>Envío por DAC<small>A todo el país. El flete lo pagás vos al retirar.</small></span></label></fieldset>'+
+    '<label class="f" id="dacBox">Departamento y agencia donde retirás<input type="text" id="dac" value="'+esc(c.dac)+'" placeholder="Ej: Canelones, DAC Las Piedras"></label>'+
     '<fieldset><legend>¿Cómo pagás?</legend>'+
       '<label class="radio"><input type="radio" name="pago" value="tr" '+(c.pago!=='mp'?'checked':'')+'><span>Transferencia BROU o Itaú<small>Precio de lista. Te pasamos los datos de la cuenta</small></span></label>'+
       '<label class="radio"><input type="radio" name="pago" value="mp" '+(c.pago==='mp'?'checked':'')+'><span>Mercado Pago<small>10% más. Te mandamos el código QR de Mercado Pago</small></span></label></fieldset>'+
@@ -407,7 +405,7 @@ function renderDet(){
    '<h1 class="dh">'+esc(p[0])+'</h1>'+
    '<div class="dprice"><b>'+money(p[1])+'</b><span>por transferencia</span><span class="mp">Mercado Pago '+money(mpp(p))+'</span></div>'+
    '<ul class="dl">'+d.l.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'+
-   '<p class="note">Retiro en Montevideo o envío por DAC a todo el país. El flete lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.</p>'+
+   '<p class="note">Envío por DAC a todo el país. El flete lo paga el cliente. Stock sujeto a disponibilidad: te confirmamos por mensaje antes de cobrar.</p>'+
    '<div class="detbar"><button type="button" class="send" id="detAdd">'+(n?'Agregado ('+n+') · sumar otro':'Agregar al pedido')+'</button>'+
    (c?'<button type="button" class="send alt" id="detCart">Ver mi pedido ('+c+')</button>':'')+'</div>';
   var st=document.getElementById('strip'), ct=document.getElementById('cnt');
